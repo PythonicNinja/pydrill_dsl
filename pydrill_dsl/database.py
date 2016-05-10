@@ -1,4 +1,4 @@
-from peewee import QueryCompiler, Database, OP, ImproperlyConfigured
+from peewee import OP, Database, ImproperlyConfigured, QueryCompiler
 from pydrill_dsl.result import DrillQueryResultWrapper
 
 try:
