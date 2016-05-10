@@ -1,7 +1,7 @@
 import os
 
-from peewee import (BaseModel, Entity, Field, RawQuery, SelectQuery,
-                    with_metaclass)
+from peewee import BaseModel, Entity, Field, RawQuery, SelectQuery, with_metaclass
+
 from pydrill_dsl.database import Drill
 
 
