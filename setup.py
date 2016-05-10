@@ -3,7 +3,7 @@
 
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -15,11 +15,11 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    # TODO: put package requirements here
+    'peewee',
 ]
 
 test_requirements = [
-    # TODO: put package test requirements here
+    'peewee',
 ]
 
 setup(
@@ -27,23 +27,25 @@ setup(
     version='0.0.1',
     description="Pythonic DSL for Apache Drill",
     long_description=readme + '\n\n' + history,
-    author="pyDrill-dsl",
+    author="Wojciech Nowak",
     author_email='mail@pythonic.ninja',
     url='https://github.com/PythonicNinja/pydrill_dsl',
     packages=[
         'pydrill_dsl',
     ],
-    package_dir={'pydrill_dsl':
-                 'pydrill_dsl'},
+    package_dir=find_packages(
+        where='.',
+        exclude=('test_*', )
+    ),
     include_package_data=True,
     install_requires=requirements,
-    license="ISCL",
+    license="MIT",
     zip_safe=False,
     keywords='pydrill_dsl',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: ISC License (ISCL)',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.6',

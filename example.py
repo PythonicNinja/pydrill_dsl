@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-
-from pydrill.client import PyDrill
+from peewee import Field, fn
 
 from pydrill_dsl.resource import Resource
-from pydrill_dsl.query_objects import Field, fn
 
 YELP_LOCATION = '/Users/macbookair/Downloads/datasets/yelp_dataset_challenge_academic_dataset/'
 
@@ -18,12 +16,21 @@ class Employee(Resource):
         storage_plugin = 'cp'
         path = 'employee.json'
 
+    def salary_with_name(self):
+        return u"{} - {}".format(self.first_name, self.salary)
+
 
 employee = Resource(storage_plugin='cp', path='employee.json',
                     fields=('first_name', 'salary', 'position_id', 'department_id'))
 
+employe_ = Resource(name='EmployeeClass', storage_plugin='cp', path='employee.json',
+                    fields=('first_name', 'salary', 'position_id', 'department_id'))
 
-# employee.select().where(employee.salary >= 2000)
+list(employee.select().where(employee.salary >= 2000))
+x = employe_.select().where(employe_.salary >= 2000)
+x.sql
+list(x)
+
 
 class YoublProducts(Resource):
     count = Field()
@@ -68,9 +75,6 @@ class User(Resource):
         path = YELP_LOCATION + 'yelp_academic_dataset_review.json'
 
 
-
-
-
 class Tips(Resource):
     user_id = Field()
     # text = Field()
@@ -82,28 +86,34 @@ class Tips(Resource):
 
 
 if __name__ == '__main__':
-    drill = PyDrill()
-
     salary_gte_17K = (Employee.salary >= 17000)
     salary_lte_25K = (Employee.salary <= 25000)
-
     salary_gte_0K = (Employee.salary >= 0)
     num_tips = fn.COUNT(Tips.user_id)
 
-
     queries = [
-                  # Employee.select().filter(first_name__eq='Sheri'),
-                  # Employee.select().filter(first_name__ne='Sheri'),
-                  # Employee.select().filter(salary__gte=17000),
-                  # Employee.select(),
-                  # Employee.select().count(),
-                  # Employee.select().where((Employee.first_name == 'Sheri')),
-                  # Employee.select().where(salary_gte_17K & salary_lte_25K),
-                  # Employee.select().where(salary_gte_17K),
-                  #
-                  # Employee.select().order_by((Employee.first_name)).limit(10).where(
-                  #     (Employee.position_id == Employee.department_id) & salary_gte_17K),
-                  # Employee.select().where(fn.Lower(fn.Substr(Employee.first_name, 1, 1)) == 's').count(),
+                  Employee.select().filter(first_name__eq='Sheri'),
+                  Employee.select().filter(first_name__ne='Sheri'),
+                  Employee.select().filter(salary__gte=17000),
+                  Employee.select(),
+                  Employee.select(Employee.position_id).order_by(Employee.department_id),
+                  Employee.select().paginate(page=1, paginate_by=5),
+                  Employee.select().paginate(page=2, paginate_by=5),
+                  Employee.select().paginate(page=3, paginate_by=5),
+                  Employee.select().where((Employee.first_name == 'Sheri')),
+                  Employee.select().where((Employee.first_name.contains('S'))),
+                  Employee.select().where(salary_gte_17K & salary_lte_25K),
+                  Employee.select().where(salary_gte_17K),
+                  Employee.select().order_by((Employee.first_name)).limit(10).where(
+                      (Employee.position_id == Employee.department_id) & salary_gte_17K),
+                  Employee.select().count(),
+                  Employee.select().where(fn.Lower(fn.Substr(Employee.first_name, 1, 1)) == 's').count(),
+                  Employee.select().order_by(fn.Rand()).limit(3),
+                  Employee.select(
+                      fn.Min(Employee.salary).alias('salary_min'),
+                      fn.Max(Employee.salary).alias('salary_max')
+                  ).scalar(as_tuple=True),
+
               ] + [
                   # YoublProducts.select().distinct(
                   #     YoublProducts.shop).order_by(
@@ -116,10 +126,11 @@ if __name__ == '__main__':
               ] + [
                   # Tips.select().count(),
                   # Tips.select().where(Tips.type == "tip").count(),
-                  # Tips.select(Tips.user_id, num_tips.alias('num_tips')).group_by(Tips.user_id).order_by(num_tips.desc()).limit(10),
+                  # Tips.select(Tips.user_id, num_tips.alias('num_tips')).group_by(Tips.user_id).order_by(
+                  #     num_tips.desc()).limit(10),
               ] + [
                   # Reviews.select(Reviews.votes).count(),
-                  Reviews.select(Reviews.votes).limit(10),
+                  # Reviews.select(Reviews.votes).limit(10),
                   # Reviews.select().order_by(Reviews.votes.desc()).limit(10),
               ] + [
                   # Tips.select(Tips.type, User.yelping_since, User.user_id, fn.Count('*').alias('num_tips'))
@@ -129,8 +140,9 @@ if __name__ == '__main__':
                   #     .limit(5)
               ]
     for query in queries:
-        sql = query.sql()
-        print(sql)
-        results = drill.query(sql=sql, timeout=9999)
-        for result in results:
-            print(result)
+
+        if not hasattr(query, 'execute'):
+            print query
+            continue
+
+        print list(query)

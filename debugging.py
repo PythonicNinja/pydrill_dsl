@@ -1,12 +1,19 @@
-from pydrill_dsl.query_objects import QueryCompiler, SelectQuery
-from example import Employee
+from example import Tips, User, Employee
+from peewee import fn, SelectQuery
 
+selections = [
+    Employee.first_name,
+    Employee.department_id,
+    Employee.salary,
+    fn.AVG(Employee.salary).over(partition_by=[Employee.department_id]).alias('SalaryPerDepartament')
+]
+print selections
 
-employ_in_1 = Employee.department_id == 1
+query = Tips.select(Tips.type, User.yelping_since, User.user_id, fn.Count('*').alias('num_tips'))\
+    .join(User, on=(Tips.user_id == User.user_id))
 
-print employ_in_1
+print query
+
+employ_in_1 = (Employee.department_id == 1)
 
 query = SelectQuery(Employee, [employ_in_1])
-
-print
-
