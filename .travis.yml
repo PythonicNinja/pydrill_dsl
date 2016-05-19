@@ -7,6 +7,7 @@ addons:
     - python3.5
     - python3.5-dev
     - python-dev
+    - unixodbc-dev
     sources:
     - deadsnakes
 after_success:
