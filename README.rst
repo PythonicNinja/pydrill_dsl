@@ -26,9 +26,21 @@ Pythonic DSL for `Apache Drill <https://drill.apache.org/>`_.
 Features
 --------
 
-* Uses Peewee syntax
+* Uses Peewee syntax. `examples for selecting data are in peewee docs <http://docs.peewee-orm.com/en/latest/peewee/querying.html#selecting-a-single-record>`_.
 * Support for all storage plugins
 * Support for drivers PyODBC and pyDrill
+
+Installation
+------------
+::
+
+Version from https://pypi.python.org/pypi/pydrill_dsl::
+
+    $ pip install pydrill_dsl
+
+Latest version from git::
+
+    $ pip install git+git://github.com/PythonicNinja/pydrill_dsl.git
 
 Sample usage
 ------------
@@ -45,7 +57,9 @@ Sample usage
         class Meta:
             storage_plugin = 'cp'
             path = 'employee.json'
-
+            # by default it uses pydrill
+            # example of using pydobc
+            # database = Drill({'dsn': 'Driver=/opt/mapr/drillodbc/lib/universal/libmaprdrillodbc.dylib;ConnectionType=Direct;Host=127.0.0.1;Port=31010;Catalog=DRILL;AuthenticationType=Basic Authentication;AdvancedProperties=CastAnyToVarchar=true;HandshakeTimeout=5;QueryTimeout=180;TimestampTZDisplayTimezone=utc;ExcludedSchemas=sys,INFORMATION_SCHEMA;NumberOfPrefetchBuffers=5;UID=[USERNAME];PWD=[PASSWORD]'})
 
     Employee.select().filter(salary__gte=17000)
 
