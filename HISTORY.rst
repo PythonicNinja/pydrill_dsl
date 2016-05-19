@@ -3,6 +3,7 @@ History
 =======
 
 0.0.2 (2016-05-19)
+------------------
 
 * First release on PyPI.
 * Uses Peewee syntax

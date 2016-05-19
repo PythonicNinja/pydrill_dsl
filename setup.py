@@ -27,10 +27,7 @@ setup(
     author="Wojciech Nowak",
     author_email='mail@pythonic.ninja',
     url='https://github.com/PythonicNinja/pydrill_dsl',
-    packages=[
-        'pydrill_dsl',
-    ],
-    package_dir=find_packages(
+    packages=find_packages(
         where='.',
         exclude=('test_*', )
     ),
