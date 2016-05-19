@@ -2,15 +2,18 @@
 pyDrill-dsl
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/pydrill_dsl.svg
-        :target: https://pypi.python.org/pypi/pydrill_dsl
-
 .. image:: https://img.shields.io/travis/PythonicNinja/pydrill_dsl.svg
         :target: https://travis-ci.org/PythonicNinja/pydrill_dsl
+
+.. image:: https://img.shields.io/pypi/v/pydrill_dsl.svg
+        :target: https://pypi.python.org/pypi/pydrill_dsl
 
 .. image:: https://readthedocs.org/projects/pydrill_dsl/badge/?version=latest
         :target: https://readthedocs.org/projects/pydrill_dsl/?badge=latest
         :alt: Documentation Status
+
+.. image:: https://coveralls.io/repos/github/PythonicNinja/pydrill_dsl/badge.svg
+        :target: https://coveralls.io/github/PythonicNinja/pydrill_dsl
 
 
 Pythonic DSL for `Apache Drill <https://drill.apache.org/>`_.
@@ -25,6 +28,7 @@ Features
 
 * Uses Peewee syntax
 * Support for all storage plugins
+* Support for drivers PyODBC and pyDrill
 
 Sample usage
 ------------
