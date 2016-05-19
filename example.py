@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from peewee import Field, fn
+from pydrill_dsl.database import Drill
 
 from pydrill_dsl.resource import Resource
 
@@ -15,6 +16,9 @@ class Employee(Resource):
     class Meta:
         storage_plugin = 'cp'
         path = 'employee.json'
+        database = Drill({
+            'dsn': 'Driver=/opt/mapr/drillodbc/lib/universal/libmaprdrillodbc.dylib;ConnectionType=Direct;Host=127.0.0.1;Port=31010;Catalog=DRILL;AuthenticationType=Basic Authentication;AdvancedProperties=CastAnyToVarchar=true;HandshakeTimeout=5;QueryTimeout=180;TimestampTZDisplayTimezone=utc;ExcludedSchemas=sys,INFORMATION_SCHEMA;NumberOfPrefetchBuffers=5;UID=[USERNAME];PWD=[PASSWORD]'
+        })
 
     def salary_with_name(self):
         return u"{} - {}".format(self.first_name, self.salary)
@@ -90,7 +94,6 @@ if __name__ == '__main__':
     salary_lte_25K = (Employee.salary <= 25000)
     salary_gte_0K = (Employee.salary >= 0)
     num_tips = fn.COUNT(Tips.user_id)
-
     queries = [
                   Employee.select().filter(first_name__eq='Sheri'),
                   Employee.select().filter(first_name__ne='Sheri'),
@@ -144,5 +147,4 @@ if __name__ == '__main__':
         if not hasattr(query, 'execute'):
             print query
             continue
-
         print list(query)

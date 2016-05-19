@@ -24,7 +24,7 @@ class Resource(with_metaclass(BaseModel)):
             field.add_to_class(self.__class__, field_name)
             setattr(self.__class__, field_name, field)
 
-        kwargs_set_on_meta = ['storage_plugin', 'path']
+        kwargs_set_on_meta = ['storage_plugin', 'path', 'database']
         for kwarg_name in kwargs_set_on_meta:
             value = kwargs.get(kwarg_name)
             if value:
